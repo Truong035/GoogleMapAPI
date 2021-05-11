@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title> Bai Tap google Map</title>
+    <style>
+        #map {
+            height: 100%;
+        }
+
+        /* Optional: Makes the sample page fill the window. */
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    
+    <script>
+        const citymap = {
+            HCM: {
+                center: { lat: 10.779963287348368, lng: 106.69989676823458 },
+                population: 13000,
+            },
+            HN: {
+                center: { lat: 21.027427300388943, lng: 105.8354609548921 },
+                population: 13000,
+            },
+        };
+
+        function initMap() {
+            // Create the map.
+            var hcm = new google.maps.LatLng(10.779963287348368, 106.69989676823458);
+            var hn = new google.maps.LatLng(21.027427300388943, 105.8354609548921);
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 12,
+                center: hcm,
+            });
+            const directionsService = new google.maps.DirectionsService();
+            const directionsRenderer = new google.maps.DirectionsRenderer();
+            directionsRenderer.setMap(map);
+            var request = {
+                origin: hcm,
+                destination: hn,
+                travelMode: 'DRIVING'
+            };
+            directionsService.route(request, function (response, status) {
+                if (status == 'OK') {
+                    directionsRenderer.setDirections(response);
+
+                }
+            });
+            // Construct the circle for each value in citymap.
+            // Note: We scale the area of the circle based on the population.
+            for (const city in citymap) {
+                // Add the circle for this city to the map.
+                const cityCircle = new google.maps.Circle({
+                    strokeColor: "#FF0000",
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: "#FF0000",
+                    fillOpacity: 0.35,
+                    map,
+                    center: citymap[city].center,
+                    radius: citymap[city].population,
+                });
+            }
+            var duongKinh = 13000 * 2;
+     
+       
+            var triangle1 = google.maps.geometry.spherical.computeOffset(
+                hcm,
+                duongKinh,
+                0
+            );
+            var triangle2 = google.maps.geometry.spherical.computeOffset(
+                hcm,
+                duongKinh,
+                120
+            );
+            var triangle3 = google.maps.geometry.spherical.computeOffset(
+                hcm,
+                duongKinh,
+                -120
+            );
+
+     
+            myPolygon = new google.maps.Polygon({
+                path: [triangle1, triangle2, triangle3],
+                strokeColor: "#FF049",
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: "#FF0000",
+                fillOpacity: 0.35,
+                map: map,
+            });
+        
+            triangle1  = google.maps.geometry.spherical.computeOffset(
+                hcm,
+                13000,
+                 0
+             ); 
+            triangle2 = google.maps.geometry.spherical.computeOffset(
+                hcm,
+                13000,
+                120
+            );
+            triangle3= google.maps.geometry.spherical.computeOffset(
+                hcm,
+                13000,
+                -120
+            );
+            myPolygon = new google.maps.Polygon({
+                path: [triangle1, triangle2, triangle3],
+                strokeColor: "#FF000",
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: "#FF0000",
+                fillOpacity: 0.35,
+                map: map,
+            });
+            triangle1 = google.maps.geometry.spherical.computeOffset(
+                hn,
+                13000,
+                0
+            );
+            triangle2 = google.maps.geometry.spherical.computeOffset(
+                hn,
+                13000,
+                120
+            );
+            triangle3 = google.maps.geometry.spherical.computeOffset(
+                hn,
+                13000,
+                -120
+            );
+            myPolygon = new google.maps.Polygon({
+                path: [triangle1, triangle2, triangle3],
+                strokeColor: "#FF000",
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: "#FF0000",
+                fillOpacity: 0.35,
+                map: map,
+            });
+            triangle1 = google.maps.geometry.spherical.computeOffset(
+                hn,
+                duongKinh,
+                0
+            );
+            triangle2 = google.maps.geometry.spherical.computeOffset(
+                hn,
+                duongKinh,
+                120
+            );
+            triangle3 = google.maps.geometry.spherical.computeOffset(
+                hn,
+                duongKinh,
+                -120
+            );
+            myPolygon = new google.maps.Polygon({
+                path: [triangle1, triangle2, triangle3] ,
+                strokeColor: "#FF049",
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: "#FF0000",
+                fillOpacity: 0.35,
+                map: map,
+            });
+        }
+
+
+    </script>
+
+    <!-- jsFiddle will insert css and js -->
+</head>
+
+<body>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <div id="map"></div>
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    // key cua thày em chạy không đc nên em lấy key cũ ạ
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBIwzALxUPNbatRBj3Xi1Uhp0fFzwWNBkE&callback=initMap&libraries=geometry&v=weekly"></script>
+</body>
+
+</html>
